@@ -25,13 +25,12 @@ class RssFeed(BaseModel.BaseModel):
         self._delay = delay
         self._new_articles_available = False
         self._downloading = False
-        self._new_feed = False
-
         self._articles = []
 
         if title is not None and delay is not None and url is not None:
-            self._new_feed = True
+            self.new_item = True
             self._download_rss_feed()
+            self.update_db()
 
     @property
     def title(self):
@@ -65,7 +64,6 @@ class RssFeed(BaseModel.BaseModel):
                 print(str(article.pub_date) + ' ' + article.title)
                 print(article.authors)
                 print(article.text)
-
 
     def _download_rss_feed(self):
         headers = {
@@ -102,11 +100,4 @@ class RssFeed(BaseModel.BaseModel):
             print(str(article.pub_date) + ' ' + article.title)
 
         self._last_download_date = datetime.datetime.today()
-
-    def update_db(self):
-        if self._new_feed:
-            self.create()
-        else:
-            self.update()
-        self.save()
 
