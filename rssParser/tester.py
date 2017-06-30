@@ -1,4 +1,4 @@
-from rssParser import Feed, Article, SqlHelper, BaseModel
+from rssParser import Feed, SqlHelper, BaseModel
 
 # rs = RssFeed.RssFeed('new', 15, 'http://cointelegraph.com/rss/')
 rs = Feed.RssFeed('new1', 15, 'https://letstalkbitcoin.com/rss/feed/blog')

@@ -8,7 +8,7 @@ import datetime
 from peewee import *
 from peewee import CharField, DateTimeField, ForeignKeyField
 
-from rssParser import Article, BaseModel
+from rssParser import BaseModel
 
 class RssFeed(BaseModel.BaseModel):
     """ RSS feed main class
