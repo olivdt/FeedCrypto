@@ -1,11 +1,11 @@
 from peewee import *
-from rssParser import RssFeed, BaseModel
+from rssParser import Feed, BaseModel
 
 class SqlHelper(object):
 
     def open(self):
         BaseModel.database.connect()
-        BaseModel.database.create_tables([RssFeed.RssFeed], safe=True)
+        BaseModel.database.create_tables([Feed.RssFeed], safe=True)
 
     def close(self):
         BaseModel.database.close()
