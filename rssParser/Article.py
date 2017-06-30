@@ -12,7 +12,7 @@ class Article(BaseModel.BaseModel):
     _url = CharField(unique=True)
     _pub_date = DateTimeField()
     _text = CharField()
-    _rssFeed = ForeignKeyField(RssFeed.RssFeed, related_name='articles')
+#    _rssFeed = ForeignKeyField(RssFeed.RssFeed, related_name='articles')
 
     def __init__(self, title=None, url=None, pubDate=None):
         super(Article, self).__init__()
@@ -65,7 +65,6 @@ class Article(BaseModel.BaseModel):
             self._title = self._articleParse.title
             self._downloaded = True
 
-    def update_db(self):
-        self.create()
+        self.update_db()
 
 
