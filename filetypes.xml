@@ -1,0 +1,9 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <ignoreFiles list="*$py.class;*.hprof;*.pyc;*.pyo;*.rbc;*~;.DS_Store;.git;.hg;.pyc;.pyo;.svn;CVS;RCS;SCCS;__pycache__;_svn;rcs;" />
+    <extensionMap>
+      <mapping pattern="requirements" type="PLAIN_TEXT" />
+      <mapping ext="php" type="PHP files" />
+    </extensionMap>
+  </component>
+</application>
