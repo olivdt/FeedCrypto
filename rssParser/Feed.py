@@ -14,7 +14,7 @@ class RssFeed(BaseModel.BaseModel):
     """ RSS feed main class
     """
 
-    _title = CharField(primary_key=True)
+    _title = CharField(unique=True)
     _url = CharField()
     _delay = IntegerField()
     _last_download_date = DateTimeField()
@@ -31,9 +31,11 @@ class RssFeed(BaseModel.BaseModel):
         self._articles = []
 
         if title is not None and delay is not None and url is not None:
+            # TODO: Check logic for new vs existing items
             self.new_item = True
-            self._download_rss_feed()
+            self._last_download_date = datetime.datetime.now()
             self.update_db()
+            self._download_rss_feed()
 
     @property
     def title(self):
@@ -94,29 +96,29 @@ class RssFeed(BaseModel.BaseModel):
             pub_date = parser.parse(pub_date_str)
             link = item.findtext('link')
             if self._articles.__len__() == 0 or pub_date < self._articles[0].pub_date:
-                self._articles.append(Article(title, link, pub_date))
+                self._articles.append(Article(title, link, pub_date, self))
                 self._new_articles_available = True
 
         self._articles.sort(key=lambda Article: Article.pub_date, reverse=True)
 
         for article in self._articles:
-            print(str(article.pub_date) + ' ' + article.title)
+            print(str(article.pub_date) + ' ' + article.title + ' ' + article.url)
+            article.get_article_contents()
 
         self._last_download_date = datetime.datetime.today()
-
 
 class Article(BaseModel.BaseModel):
     """ Article class that can be used with
         any type of feed (RSS/Atom/
     """
 
-    _title = CharField(primary_key=True)
+    _title = CharField(unique=True)
     _url = CharField(unique=True)
     _pub_date = DateTimeField()
     _text = CharField()
     _rssFeed = ForeignKeyField(RssFeed, related_name='articles')
 
-    def __init__(self, title=None, url=None, pubDate=None):
+    def __init__(self, title=None, url=None, pubDate=None, rssFeed=None):
         super(Article, self).__init__()
 #        self._title = title if title != None else ''
 #        self._url = url if url != None else ''
@@ -125,6 +127,7 @@ class Article(BaseModel.BaseModel):
         self._title = title
         self._url = url
         self._pub_date = pubDate
+        self._rssFeed = rssFeed
 
 
         if self._title != None and self._url != None and self._pub_date != None:
@@ -166,5 +169,6 @@ class Article(BaseModel.BaseModel):
             self._authors = self._articleParse.authors
             self._title = self._articleParse.title
             self._downloaded = True
+            self.new_item = True
 
         self.update_db()
